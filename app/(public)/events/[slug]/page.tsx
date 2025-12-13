@@ -17,7 +17,7 @@ import {
   Loader2,
   CheckCircle,
 } from "lucide-react";
-import { useConvexQuery } from "@/hooks/use-convex-query";
+import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
@@ -29,7 +29,6 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCategoryIcon, getCategoryLabel } from "@/lib/data";
 import RegisterModal from "./_components/register-modal";
-import { useQuery } from "convex/react";
 
 // Utility function to darken a color
 function darkenColor(color: string, amount: number): string {
@@ -54,12 +53,13 @@ export default function EventDetailPage() {
     slug ? { slug } : "skip"
   );
 
-  const [isLoading, setIsLoading] = useState(false);
   // Check if user is already registered
-  const  registration = useQuery(
+  const registration = useQuery(
     api.registrations.checkRegistration,
     event?._id ? { eventId: event._id } : "skip"
   );
+
+  const isLoading = event === undefined;
 
   const handleShare = async () => {
     const url = window.location.href;
