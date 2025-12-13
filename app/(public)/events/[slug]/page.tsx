@@ -29,6 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCategoryIcon, getCategoryLabel } from "@/lib/data";
 import RegisterModal from "./_components/register-modal";
+import { useQuery } from "convex/react";
 
 // Utility function to darken a color
 function darkenColor(color: string, amount: number): string {
@@ -47,12 +48,15 @@ export default function EventDetailPage() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   // Fetch event details
-  const { data: event, isLoading } = useConvexQuery(api.events.getEventBySlug, {
-    slug: params.slug,
-  });
+  const slug = typeof params.slug === "string" ? params.slug : undefined;
+  const event: any = useQuery(
+    api.events.getEventBySlug,
+    slug ? { slug } : "skip"
+  );
 
+  const [isLoading, setIsLoading] = useState(false);
   // Check if user is already registered
-  const { data: registration } = useConvexQuery(
+  const  registration = useQuery(
     api.registrations.checkRegistration,
     event?._id ? { eventId: event._id } : "skip"
   );

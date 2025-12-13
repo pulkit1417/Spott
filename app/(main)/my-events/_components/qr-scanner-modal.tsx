@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useMutation } from "convex/react";
 
 interface QRScannerModalProps {
   isOpen: boolean;
@@ -23,9 +24,7 @@ export default function QRScannerModal({ isOpen, onClose }: QRScannerModalProps)
   const [scannerReady, setScannerReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { mutate: checkInAttendee } = useConvexMutation(
-    api.registrations.checkInAttendee
-  );
+  const checkInAttendee = useMutation(api.registrations.checkInAttendee);
 
   const handleCheckIn = async (qrCode: string) => {
     try {

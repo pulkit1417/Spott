@@ -37,6 +37,7 @@ import UnsplashImagePicker from "@/components/upsplash-image-picker";
 import UpgradeModal from "@/components/upgrade-modal";
 import { CATEGORIES } from "@/lib/data";
 import Image from "next/image";
+import { useMutation, useQuery } from "convex/react";
 
 // HH:MM in 24h
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -83,10 +84,10 @@ export default function CreateEventPage() {
     const { has } = useAuth();
     const hasPro = has?.({ plan: "pro" });
 
-    const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
-    const { mutate: createEvent, isLoading } = useConvexMutation(
-        api.events.createEvent
-    );
+    const currentUser = useQuery(api.users.getCurrentUser);
+    const createEvent = useMutation(api.events.createEvent);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
@@ -164,7 +165,10 @@ export default function CreateEventPage() {
             }
 
             // Check event limit for Free users
-            if (!hasPro && currentUser?.freeEventsCreated >= 1) {
+            if (
+                !hasPro &&
+                (currentUser?.freeEventsCreated !== undefined && currentUser.freeEventsCreated >= 1)
+            ) {
                 setUpgradeReason("limit");
                 setShowUpgradeModal(true);
                 return;

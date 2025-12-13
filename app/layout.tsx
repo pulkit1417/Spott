@@ -6,11 +6,6 @@ import Footer from "@/components/Footer";
 import { ConvexClientProvider } from '../app/ConvexClientProvider'
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from '@clerk/nextjs'
 import {dark} from '@clerk/themes'
 import { Toaster } from "sonner";

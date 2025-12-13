@@ -1,7 +1,105 @@
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent } from "@/components/ui/card";
+// import { api } from "@/convex/_generated/api";
+// import { useConvexMutation } from "@/hooks/use-convex-query";
+// import { format } from "date-fns";
+// import { CheckCircle, Circle, Loader2 } from "lucide-react";
+// import { toast } from "sonner";
+
+// import type { Id } from "@/convex/_generated/dataModel";
+
+// // Define TypeScript type for registration prop
+// type Registration = {
+//   _id: Id<"registrations">;
+//   attendeeName: string;
+//   attendeeEmail: string;
+//   qrCode: string;
+//   checkedIn: boolean;
+//   checkedInAt?: number;
+//   registeredAt: number;
+//   // Add any other properties as needed
+// };
+
+// // Attendee Card Component
+// export function AttendeeCard({ registration }: { registration: Registration }) {
+//   const { mutate: checkInAttendee, isLoading } = useConvexMutation(
+//     api.registrations.checkInAttendee
+//   );
+
+//   const handleManualCheckIn = async () => {
+//     try {
+//       const result = await checkInAttendee({ qrCode: registration.qrCode });
+//       if (result.success) {
+//         toast.success("Attendee checked in successfully");
+//       } else {
+//         toast.error(result.message);
+//       }
+//     } catch (error: any) {
+//       toast.error(error.message || "Failed to check in attendee");
+//     }
+//   };
+
+//   return (
+//     <Card className="py-0">
+//       <CardContent className="p-4 flex items-start gap-4">
+//         <div
+//           className={`mt-1 p-2 rounded-full ${
+//             registration.checkedIn ? "bg-green-100" : "bg-gray-100"
+//           }`}
+//         >
+//           {registration.checkedIn ? (
+//             <CheckCircle className="w-5 h-5 text-green-600" />
+//           ) : (
+//             <Circle className="w-5 h-5 text-gray-400" />
+//           )}
+//         </div>
+
+//         <div className="flex-1 min-w-0">
+//           <h3 className="font-semibold mb-1">{registration.attendeeName}</h3>
+//           <p className="text-sm text-muted-foreground mb-2">
+//             {registration.attendeeEmail}
+//           </p>
+//           <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+//             <span>
+//               {registration.checkedIn ? "⏰ Checked in" : "📅 Registered"}{" "}
+//               {registration.checkedIn && registration.checkedInAt
+//                 ? format(registration.checkedInAt, "PPp")
+//                 : format(registration.registeredAt, "PPp")}
+//             </span>
+//             <span className="font-mono">QR: {registration.qrCode}</span>
+//           </div>
+//         </div>
+
+//         {!registration.checkedIn && (
+//           <Button
+//             size="sm"
+//             variant="outline"
+//             onClick={handleManualCheckIn}
+//             disabled={isLoading}
+//             className="gap-2"
+//           >
+//             {isLoading ? (
+//               <Loader2 className="w-4 h-4 animate-spin" />
+//             ) : (
+//               <>
+//                 <CheckCircle className="w-4 h-4" />
+//                 Check In
+//               </>
+//             )}
+//           </Button>
+//         )}
+//       </CardContent>
+//     </Card>
+//   );
+// }
+
+
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
-import { useConvexMutation } from "@/hooks/use-convex-query";
+import { useMutation } from "convex/react";
 import { format } from "date-fns";
 import { CheckCircle, Circle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -22,11 +120,11 @@ type Registration = {
 
 // Attendee Card Component
 export function AttendeeCard({ registration }: { registration: Registration }) {
-  const { mutate: checkInAttendee, isLoading } = useConvexMutation(
-    api.registrations.checkInAttendee
-  );
+  const checkInAttendee = useMutation(api.registrations.checkInAttendee);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleManualCheckIn = async () => {
+    setIsLoading(true);
     try {
       const result = await checkInAttendee({ qrCode: registration.qrCode });
       if (result.success) {
@@ -36,6 +134,8 @@ export function AttendeeCard({ registration }: { registration: Registration }) {
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to check in attendee");
+    } finally {
+      setIsLoading(false);
     }
   };
 

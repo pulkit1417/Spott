@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useMutation } from "convex/react";
 
 interface RegisterModalProps {
   event: any;
@@ -35,9 +36,11 @@ export default function RegisterModal({ event, isOpen, onClose }: RegisterModalP
   );
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const { mutate: registerForEvent, isLoading } = useConvexMutation(
+  const registerForEvent = useMutation(
     api.registrations.registerForEvent
   );
+
+  const[isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();

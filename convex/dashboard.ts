@@ -6,7 +6,7 @@ import { v } from "convex/values";
 export const getEventDashboard = query({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(internal.users.getCurrentUser);
+    const user = await ctx.runQuery(internal.users.getCurrentUserInternal);
 
     if (!user) {
       throw new Error("User not found");
