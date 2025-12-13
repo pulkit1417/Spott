@@ -10,9 +10,6 @@ Built using **Next.js App Router**, SPOTT focuses on performance, clean UI, and 
 
 ## 🖼️ Landing Page Preview
 
-> 📸 **Landing Page Screenshot**  
-> _(Add your landing page image here)_
-
 ![SPOTT Landing Page](https://github.com/user-attachments/assets/deecae25-cf96-4356-892a-5aad2fd4c31c)
 <!-- <img width="1919" height="937" alt="Screenshot 2025-12-13 201330" src="https://github.com/user-attachments/assets/deecae25-cf96-4356-892a-5aad2fd4c31c" /> -->
 
