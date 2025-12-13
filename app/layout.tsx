@@ -13,7 +13,7 @@ import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
-  title: "Spott",
+  title: "Spott | Discover and create amazing events",
   description: "Discover and create amazing events",
 };
 
