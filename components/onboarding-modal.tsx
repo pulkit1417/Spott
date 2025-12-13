@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, use } from "react";
 import { MapPin, Heart, ArrowRight, ArrowLeft } from "lucide-react";
 import { useConvexMutation } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CATEGORIES } from "@/lib/data";
+import { useMutation } from "convex/react";
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -41,9 +42,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     country: "India",
   });
 
-  const { mutate: completeOnboarding, isLoading } = useConvexMutation(
-    api.users.completeOnboarding
-  );
+  const completeOnboarding = useMutation(api.users.completeOnboarding);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Get Indian states
   const indianStates = useMemo(() => {

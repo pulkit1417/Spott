@@ -20,6 +20,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { useMutation, useQuery } from "convex/react";
 
 export default function SearchLocationBar() {
   const router = useRouter();
@@ -27,17 +28,16 @@ export default function SearchLocationBar() {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const { data: currentUser, isLoading } = useConvexQuery(
-    api.users.getCurrentUser
-  );
-  const { mutate: updateLocation } = useConvexMutation(
-    api.users.completeOnboarding
-  );
+  const currentUser = useQuery(api.users.getCurrentUser);
+  const [isLoading, setIsLoading] = useState(false);
+  const updateLocation = useMutation(api.users.completeOnboarding);
 
-  const { data: searchResults, isLoading: searchLoading } = useConvexQuery(
+  const searchResults = useQuery(
     api.search.searchEvents,
     searchQuery.trim().length >= 2 ? { query: searchQuery, limit: 5 } : "skip"
   );
+
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const indianStates = useMemo(() => State.getStatesOfCountry("IN"), []);
 
