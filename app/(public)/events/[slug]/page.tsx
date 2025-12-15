@@ -56,7 +56,7 @@ export default function EventDetailPage() {
   // Check if user is already registered
   const registration = useQuery(
     api.registrations.checkRegistration,
-    event?._id ? { eventId: event._id } : "skip"
+    user &&  event?._id ? { eventId: event._id } : "skip"
   );
 
   const isLoading = event === undefined;
