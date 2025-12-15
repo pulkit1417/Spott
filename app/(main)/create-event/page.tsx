@@ -35,6 +35,7 @@ import {
 
 import UnsplashImagePicker from "@/components/upsplash-image-picker";
 import UpgradeModal from "@/components/upgrade-modal";
+import AIEventCreator from "./_components/ai-event-creator";
 import { CATEGORIES } from "@/lib/data";
 import Image from "next/image";
 import { useMutation, useQuery } from "convex/react";
@@ -209,6 +210,31 @@ export default function CreateEventPage() {
         }
     };
 
+    const handleAIGenerate = (generatedData: {
+        title: string;
+        description: string;
+        category: string;
+        suggestedCapacity?: number;
+        suggestedTicketType?: string;
+    }) => {
+        setValue("title", generatedData.title);
+        setValue("description", generatedData.description);
+        setValue("category", generatedData.category);
+
+        if (typeof generatedData.suggestedCapacity === "number") {
+            setValue("capacity", generatedData.suggestedCapacity);
+        }
+
+        if (
+            generatedData.suggestedTicketType === "free" ||
+            generatedData.suggestedTicketType === "paid"
+        ) {
+            setValue("ticketType", generatedData.suggestedTicketType);
+        }
+
+        toast.success("Event details filled! Customize as needed.");
+    }
+
     return (
         <div
             className="min-h-screen transition-colors duration-300 px-6 py-8 -mt-6 md:-mt-16 lg:-mt-5 lg:rounded-md"
@@ -224,7 +250,9 @@ export default function CreateEventPage() {
                         </p>
                     )}
                 </div>
+                <AIEventCreator onEventGenerated={handleAIGenerate} />
             </div>
+
 
             <div className="max-w-6xl mx-auto grid md:grid-cols-[320px_1fr] gap-10">
                 {/* LEFT: Image + Theme */}
@@ -265,8 +293,8 @@ export default function CreateEventPage() {
                                     key={color}
                                     type="button"
                                     className={`w-10 h-10 rounded-full border-2 transition-all ${!hasPro && color !== "#1e3a8a"
-                                            ? "opacity-40 cursor-not-allowed"
-                                            : "hover:scale-110"
+                                        ? "opacity-40 cursor-not-allowed"
+                                        : "hover:scale-110"
                                         }`}
                                     style={{
                                         backgroundColor: color,
